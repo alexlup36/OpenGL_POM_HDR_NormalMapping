@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MyEngine.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{97042d87-92e0-41d8-94ba-068e3b2497cd}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\quadRenderFS.glsl" />
+    <None Include="Shaders\quadRenderVS.glsl" />
+    <None Include="Shaders\reflectionFS.glsl" />
+    <None Include="Shaders\reflectionVS.glsl" />
+    <None Include="Shaders\simpleFragmentShader.glsl" />
+    <None Include="Shaders\simpleFragmentShader2.glsl" />
+    <None Include="Shaders\simpleVertexShader.glsl" />
+    <None Include="Shaders\simpleVertexShader2.glsl" />
+    <None Include="Shaders\skyboxFS.glsl" />
+    <None Include="Shaders\skyboxVS.glsl" />
+    <None Include="Shaders\TextFragmentShader.glsl" />
+    <None Include="Shaders\TextVertexShader.glsl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6A1178F6-6C57-4B24-B781-34E333AAA5B6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Demo</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\Temp\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(Configuration)\Temp\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Libraries\glfw-3.0.4.bin.WIN32\include\GLFW;$(ProjectDir)..\Engine;$(ProjectDir)..\..\Libraries\glew-1.10.0\include;$(ProjectDir)..\..\Libraries\glm;$(ProjectDir)..\..\Libraries\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Libraries\glfw-3.1.2.bin.WIN32\lib-vc2015;$(ProjectDir)..\Engine\Debug;$(ProjectDir)..\..\Libraries\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\..\Libraries\SpartanJ-soil2-65bc0b5e52cb\lib\windows;$(ProjectDir)..\..\Libraries\Assimp\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;GLFW3.lib;glu32.lib;Soil2.lib;assimp.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)\..\..\Libraries\Assimp\lib\x86\assimp.dll $(SolutionDir)\Debug\
+xcopy /y $(ProjectDir)\..\..\Libraries\glew-1.10.0\bin\Release\Win32\glew32.dll $(SolutionDir)\Debug\
+xcopy /y $(ProjectDir)\..\..\Libraries\glfw-3.1.2.bin.WIN32\lib-vc2015\glfw3.dll $(SolutionDir)\Debug\
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Libraries\glfw-3.0.4.bin.WIN64\include\GLFW;$(ProjectDir)..\..\Libraries\glew-1.10.0\include;$(ProjectDir)..\Engine;$(ProjectDir)..\..\Libraries\glm;$(ProjectDir)..\..\Libraries\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2015;$(ProjectDir)..\..\Libraries\glew-1.10.0\lib\Release\x64;$(ProjectDir)..\Engine\x64\Debug;$(ProjectDir)..\..\Libraries\SpartanJ-soil2-65bc0b5e52cb\lib\windows\x64;$(ProjectDir)..\..\Libraries\Assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;GLFW3.lib;GLFW3DLL.lib;glu32.lib;Soil2.lib;assimp.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)\..\..\Libraries\Assimp\lib\x64\assimp.dll $(SolutionDir)\x64\Debug\
+xcopy /y $(ProjectDir)\..\..\Libraries\glew-1.10.0\bin\Release\x64\glew32.dll $(SolutionDir)\x64\Debug\
+xcopy /y $(ProjectDir)\..\..\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2015\glfw3.dll $(SolutionDir)\x64\Debug\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Libraries\glfw-3.0.4.bin.WIN32\include\GLFW;$(ProjectDir)..\Engine;$(ProjectDir)..\..\Libraries\glew-1.10.0\include;$(ProjectDir)..\..\Libraries\glm;$(ProjectDir)..\..\Libraries\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Libraries\glfw-3.1.2.bin.WIN32\lib-vc2015;$(ProjectDir)..\Engine\Release;$(ProjectDir)..\..\Libraries\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\..\Libraries\SpartanJ-soil2-65bc0b5e52cb\lib\windows;$(ProjectDir)..\..\Libraries\Assimp\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;GLFW3.lib;glu32.lib;Soil2.lib;assimp.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)\..\..\Libraries\Assimp\lib\x86\assimp.dll $(SolutionDir)\Release\
+xcopy /y $(ProjectDir)\..\..\Libraries\glew-1.10.0\bin\Release\Win32\glew32.dll $(SolutionDir)\Release\
+xcopy /y $(ProjectDir)\..\..\Libraries\glfw-3.1.2.bin.WIN32\lib-vc2015\glfw3.dll $(SolutionDir)\Release\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Libraries\glfw-3.0.4.bin.WIN64\include\GLFW;$(ProjectDir)..\..\Libraries\glew-1.10.0\include;$(ProjectDir)..\Engine;$(ProjectDir)..\..\Libraries\glm;$(ProjectDir)..\..\Libraries\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2015;$(ProjectDir)..\..\Libraries\glew-1.10.0\lib\Release\x64;$(TargetDir);$(ProjectDir)..\..\Libraries\SpartanJ-soil2-65bc0b5e52cb\lib\windows\x64;$(ProjectDir)..\..\Libraries\Assimp\lib\x64;$(ProjectDir)..\Engine\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;GLFW3.lib;GLFW3DLL.lib;glu32.lib;Soil2.lib;assimp.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)\..\..\Libraries\Assimp\lib\x64\assimp.dll $(SolutionDir)\x64\Release\
+xcopy /y $(ProjectDir)\..\..\Libraries\glew-1.10.0\bin\Release\x64\glew32.dll $(SolutionDir)\x64\Release\
+xcopy /y $(ProjectDir)\..\..\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2015\glfw3.dll $(SolutionDir)\x64\Release\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
