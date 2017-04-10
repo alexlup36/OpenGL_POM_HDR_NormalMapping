@@ -2,16 +2,10 @@
 #define __SHADERMAN_H__
 
 #include "Common.h"
-#include "GameComponent.h"
-#include "Shader.h"
 
 #include <list>
 
-
-class GameComponent;
-
-
-class ShaderMan : public GameComponent
+class ShaderMan
 {
 private:
 	// Typedefs

@@ -10,5 +10,5 @@ uniform sampler2D diffuseSampler;
 
 void main()
 {
-	color = texture2D(diffuseSampler, UV);
+	color = texture(diffuseSampler, UV);
 }

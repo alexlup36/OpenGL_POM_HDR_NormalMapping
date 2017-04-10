@@ -40,7 +40,7 @@ void RenderToTexture::SetupFramebuffer(GLint colorBufferFormat,
 		// Bind the color buffer
 		glBindTexture(GL_TEXTURE_2D, m_uiColorBuffer);
 		// Generate a texture image on the currently bound texture object
-		glTexImage2D(GL_TEXTURE_2D, 0, colorBufferFormat, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, dataType, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, colorBufferFormat, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, dataType, nullptr);
 		// Set textures parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

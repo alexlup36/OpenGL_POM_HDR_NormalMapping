@@ -43,11 +43,8 @@ in vec2 TexCoord;
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
-uniform sampler2D gTangent;
-
-uniform sampler2D diffuseSampler;
-uniform sampler2D normalSampler;
-uniform sampler2D displacementSampler;
+uniform sampler2D gAlbedoSpec2;
+uniform sampler2D gNormal2;
 
 uniform DirectionalLight dirLight;
 uniform PointLight pointLight[MAX_POINT_LIGHTS];
@@ -155,11 +152,17 @@ void main()
 	// Retrieve data from gbuffer
     vec3 FragPos	= texture(gPosition, TexCoord).rgb;
     vec3 Normal		= texture(gNormal, TexCoord).rgb;
+    vec3 Normal2	= texture(gNormal2, TexCoord).rgb;
     vec3 Diffuse	= texture(gAlbedoSpec, TexCoord).rgb;
+    vec3 Diffuse2	= texture(gAlbedoSpec2, TexCoord).rgb;
     float Specular	= texture(gAlbedoSpec, TexCoord).a;
-	vec3 Tangent 	= texture(gTangent, TexCoord).rgb;
 
-	color = blinnPhongShading(FragPos, Normal, Diffuse, Specular);
+    vec3 normalResult = 0.5f * (Normal + Normal2);
+    vec3 red = vec3(1.0f, 0.0f, 0.0f);
+    vec3 zero = vec3(0.0f, 0.0f, 0.0f);
+
+	color = blinnPhongShading(FragPos, normalResult, Diffuse, Specular) * 0.5f + blinnPhongShading(FragPos, normalResult, Diffuse2, Specular) * 0.5f;
+	color = saturate(blinnPhongShading(FragPos, normalResult, Diffuse, Specular) + blinnPhongShading(FragPos, normalResult, Diffuse2, Specular));
 }
 
 // -------------------------------------------------------

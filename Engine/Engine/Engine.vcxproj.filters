@@ -1,13 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="AbstractEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraMan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common.cpp">
@@ -22,46 +16,75 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LightTechnique.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGLApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MappedProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="HDRLightingTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRLightTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongLightTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleColorTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTechnique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="TechniqueMan.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMan.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectMan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderMan.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="TextMan.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMan.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderToTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="Camera2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="RenderToTexture.cpp" />
-    <ClCompile Include="HDRLightingTechnique.cpp" />
-    <ClCompile Include="ShadowMap.cpp" />
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
@@ -70,16 +93,10 @@
     <ClInclude Include="Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GfxStats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LightTechnique.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MappedProperties.h">
@@ -91,28 +108,69 @@
     <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGLApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="HDRLightingTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRLightTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongLightTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleColorTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="TechniqueMan.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="TextTechnique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMan.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
     <ClInclude Include="ObjectMan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderMan.h">
-      <Filter>Header Files</Filter>
+      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="TextMan.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMan.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="LightUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderToTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Skybox.h" />
-    <ClInclude Include="RenderToTexture.h" />
-    <ClInclude Include="HDRLightingTechnique.h" />
-    <ClInclude Include="ShadowMap.h" />
+    <ClInclude Include="UIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -120,6 +178,12 @@
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{222a6568-744f-4340-a596-9abce1609848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Technique">
+      <UniqueIdentifier>{4d85f24b-a958-42bc-9a1b-d8913744c95f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{c534aa15-d3f1-4c51-bb76-ad7204136276}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,54 +1,146 @@
 #include "Object.h"
 
-namespace Engine
+#include "TransformTechnique.h"
+#include "Camera.h"
+#include "CameraMan.h"
+#include "ObjectMan.h"
+
+namespace GL
 {
-	Object::Object(const std::string& name, 
+	// ----------------------------------------------------------------------------
+
+	Object::Object(const std::string& name,
 		const std::string& modelPath,
-		Engine::Shader* shader,
-		Engine::Texture* diffuseTex /*= NULL*/,
-		Engine::Texture* normalTex /*= NULL*/,
-		Engine::Texture* displacementTex /*= NULL*/,
-		Engine::Texture* specular /*= NULL*/)
-		: Name(name), 
+		BaseTechnique* technique,
+		Texture* diffuseTex /*= nullptr*/,
+		Texture* diffuseTex2 /*= nullptr*/,
+		Texture* normalTex /*= nullptr*/,
+		Texture* normalTex2 /*= nullptr*/,
+		Texture* displacementTex /*= nullptr*/,
+		Texture* specularTex /*= nullptr*/)
+		: Name(name),
 		m_sModelPath(modelPath),
-		m_childrenList(NULL),
-		m_pParentObject(NULL),
-		m_pShader(shader),
+		m_pCurrentTechnique(technique),
 		m_pTexNormal(normalTex),
+		m_pTexNormal2(normalTex2),
 		m_pTexDiffuse(diffuseTex),
+		m_pTexDiffuse2(diffuseTex2),
 		m_pTexDisplacement(displacementTex),
-		m_pTexSpecular(specular)
+		m_pTexSpecular(specularTex),
+		m_bEnablePBR(false),
+		m_bIsUI(false)
 	{
 		LoadMesh();
+		initTextureUniformLocation();
 
-		m_pTransform = new Engine::Transform();
-		m_pShader->SetTransform(m_pTransform);
+		m_pTransform = new Transform();
 	}
+
+	// ----------------------------------------------------------------------------
+
+	Object::Object(const std::string& name,
+		const std::string& modelPath,
+		BaseTechnique* technique,
+		Material* material)
+		: Name(name),
+		m_sModelPath(modelPath),
+		m_pCurrentTechnique(technique),
+		m_pMaterial(*material),
+		m_bEnablePBR(false),
+		m_bIsUI(false)
+	{
+		LoadMesh();
+		initMaterialUniformLocation();
+
+		m_pTransform = new Transform();
+
+		Init();
+	}
+
+	// ----------------------------------------------------------------------------
+
+	Object::Object(const std::string& name,
+		const std::string& modelPath,
+		BaseTechnique* technique,
+		Material* material,
+		bool ui)
+		: Name(name),
+		m_sModelPath(modelPath),
+		m_pCurrentTechnique(technique),
+		m_pMaterial(*material),
+		m_bEnablePBR(false),
+		m_bIsUI(ui)
+	{
+		LoadMesh();
+		initMaterialUniformLocation();
+
+		m_pTransform = new Transform();
+
+		Init();
+	}
+
+	// ----------------------------------------------------------------------------
+
+	Object::Object(const std::string& name,
+		const std::string& modelPath,
+		BaseTechnique* technique,
+		PBRMaterial* material)
+		: Name(name),
+		m_sModelPath(modelPath),
+		m_pCurrentTechnique(technique),
+		m_pbrMaterial(*material),
+		m_bEnablePBR(true),
+		m_bIsUI(false)
+	{
+		LoadMesh();
+		initPBRMaterialUniformLocation();
+
+		m_pTransform = new Transform();
+
+		Init();
+	}
+
+	// ----------------------------------------------------------------------------
 
 	Object::~Object(void)
 	{
 		// Delete the transform object
-		if (m_pTransform != NULL)
+		if (m_pTransform != nullptr)
 		{
 			delete m_pTransform;
-			m_pTransform = NULL;
+			m_pTransform = nullptr;
 		}
 
 		// Delete textures
-		if (m_pTexDiffuse != NULL)
+		if (m_pTexDiffuse != nullptr)
 		{
 			delete m_pTexDiffuse;
-			m_pTexDiffuse = NULL;
+			m_pTexDiffuse = nullptr;
 		}
-		if (m_pTexNormal != NULL)
+		if (m_pTexDiffuse2 != nullptr)
+		{
+			delete m_pTexDiffuse2;
+			m_pTexDiffuse2 = nullptr;
+		}
+		if (m_pTexNormal != nullptr)
 		{
 			delete m_pTexNormal;
-			m_pTexNormal = NULL;
+			m_pTexNormal = nullptr;
 		}
-		if (m_pTexDisplacement != NULL)
+		if (m_pTexNormal2 != nullptr)
+		{
+			delete m_pTexNormal2;
+			m_pTexNormal2 = nullptr;
+		}
+		if (m_pTexDisplacement != nullptr)
 		{
 			delete m_pTexDisplacement;
-			m_pTexDisplacement = NULL;
+			m_pTexDisplacement = nullptr;
+		}
+		if (m_pTexSpecular != nullptr)
+		{
+			delete m_pTexSpecular;
+			m_pTexSpecular = nullptr;
 		}
 
 		// Delete the list of meshes attached to this object
@@ -57,24 +149,182 @@ namespace Engine
 			delete m_pMeshList.back();
 			m_pMeshList.pop_back();
 		}
+	}
 
-		// Delete the elements from the child list
-		while (!m_childrenList.empty())
+	// ----------------------------------------------------------------------------
+
+	void Object::Init()
+	{
+		m_pTexDiffuse = nullptr;
+		m_pTexDiffuse2 = nullptr;
+		m_pTexNormal = nullptr;
+		m_pTexNormal2 = nullptr;
+		m_pTexDisplacement = nullptr;
+		m_pTexSpecular = nullptr;
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::render()
+	{
+		// Set the shader material
+		m_bEnablePBR ? setPBRShaderMaterial() : setShaderMaterial();
+		// Bind the texture attached to the object
+		bindTextures();
+		// Go through the meshes and render them
+		renderMeshes();
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::setMaterial(Material* newMaterial)
+	{
+		if (newMaterial != nullptr)
 		{
-			delete m_childrenList.back();
-			m_childrenList.pop_back();
+			m_pMaterial.Ambient = newMaterial->Ambient;
+			m_pMaterial.Diffuse = newMaterial->Diffuse;
+			m_pMaterial.Emission = newMaterial->Emission;
+			m_pMaterial.Shineness = newMaterial->Shineness;
+			m_pMaterial.Specular = newMaterial->Specular;
 		}
 	}
 
-	// Mesh processing
-	void 
-	Object::LoadMesh()
+	// ----------------------------------------------------------------------------
+
+	void Object::setPBRMaterial(PBRMaterial* newMaterial)
 	{
+		if (newMaterial != nullptr)
+		{
+			m_pbrMaterial.albedo = newMaterial->albedo;
+			m_pbrMaterial.ao = newMaterial->ao;
+			m_pbrMaterial.metallic = newMaterial->metallic;
+			m_pbrMaterial.roughness = newMaterial->roughness;
+		}
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::setShaderMaterial()
+	{
+		glUniform3f(m_materialUniformLocation.ambientCompLoc, m_pMaterial.Ambient.x, m_pMaterial.Ambient.y, m_pMaterial.Ambient.z);
+		glUniform3f(m_materialUniformLocation.diffuseCompLoc, m_pMaterial.Diffuse.x, m_pMaterial.Diffuse.y, m_pMaterial.Diffuse.z);
+		glUniform3f(m_materialUniformLocation.specularCompLoc, m_pMaterial.Specular.x, m_pMaterial.Specular.y, m_pMaterial.Specular.z);
+		glUniform1f(m_materialUniformLocation.shinenessLoc, m_pMaterial.Shineness);
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::setPBRShaderMaterial()
+	{
+		glUniform3f(m_pbrMaterialUniformLocation.albedoLoc, m_pbrMaterial.albedo.x, m_pbrMaterial.albedo.y, m_pbrMaterial.albedo.z);
+		glUniform1f(m_pbrMaterialUniformLocation.aoLoc, m_pbrMaterial.ao);
+		glUniform1f(m_pbrMaterialUniformLocation.roughnessLoc, m_pbrMaterial.roughness);
+		glUniform1f(m_pbrMaterialUniformLocation.metallicLoc, m_pbrMaterial.metallic);
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::update(float dt)
+	{
+		// Get active camera
+		Camera2* pActiveCamera = CameraMan::Instance().GetActiveCamera();
+
+		glm::mat4 view = pActiveCamera->ViewMatrix();
+		glm::mat4 projection;
+		if (m_bIsUI == false)
+			projection = pActiveCamera->ProjectionMatrix();
+		else
+			projection = pActiveCamera->OrthoProjectionMatrix();
+
+		// Get model matrix
+		glm::mat4 model = m_pTransform->GetModel();
+
+		// Get current transform reference
+		TransformTechnique* transformTechnique = dynamic_cast<TransformTechnique*>(m_pCurrentTechnique);
+		// Set world matrix
+		transformTechnique->setWMatrix(model);
+		// Set view matrix
+		transformTechnique->setViewMatrix(view);
+		// Set projection matrix
+		transformTechnique->setProjectionMatrix(projection);
+		// Set world-view-projection matrix
+		if (m_bIsUI == false)
+			transformTechnique->setWVPMatrix(projection * view * model);
+		else
+			transformTechnique->setWVPMatrix(projection * model);
+		// Set normal matrix
+		transformTechnique->setNMatrix(glm::transpose(glm::inverse(model)));
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::initMaterialUniformLocation()
+	{
+		// Initialize uniform locations
+		m_pCurrentTechnique->enable();
+
+		GLuint programID = m_pCurrentTechnique->getProgramID();
+		m_materialUniformLocation.emissionCompLoc = glGetUniformLocation(programID, "material.vMatEmission");
+		m_materialUniformLocation.ambientCompLoc = glGetUniformLocation(programID, "material.vMatAmbient");
+		m_materialUniformLocation.diffuseCompLoc = glGetUniformLocation(programID, "material.vMatDiffuse");
+		m_materialUniformLocation.specularCompLoc = glGetUniformLocation(programID, "material.vMatSpecular");
+		m_materialUniformLocation.shinenessLoc = glGetUniformLocation(programID, "material.fMatShineness");
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::initPBRMaterialUniformLocation()
+	{
+		// Initialize uniform locations
+		m_pCurrentTechnique->enable();
+
+		GLuint programID = m_pCurrentTechnique->getProgramID();
+		m_pbrMaterialUniformLocation.albedoLoc = glGetUniformLocation(programID, "material.albedo");
+		m_pbrMaterialUniformLocation.metallicLoc = glGetUniformLocation(programID, "material.metallic");
+		m_pbrMaterialUniformLocation.roughnessLoc = glGetUniformLocation(programID, "material.roughness");
+		m_pbrMaterialUniformLocation.aoLoc = glGetUniformLocation(programID, "material.ao");
+	}
+
+	// ----------------------------------------------------------------------------
+
+	void Object::initTextureUniformLocation()
+	{
+		// Initialize uniform locations
+		m_pCurrentTechnique->enable();
+
+		m_textureUniformLocation.diffuseSampler0 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "diffuseSampler");
+		m_textureUniformLocation.diffuseSampler1 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "diffuseSampler2");
+		m_textureUniformLocation.normalSampler0 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "normalSampler");
+		m_textureUniformLocation.normalSampler1 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "normalSampler2");
+		m_textureUniformLocation.displacementSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "displacementSampler");
+		m_textureUniformLocation.specularSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "specularSampler");
+	}
+
+	// ----------------------------------------------------------------------------
+
+	// Mesh processing
+	void Object::LoadMesh()
+	{
+		// Use cached object mesh
+		Object* cachedObject = ObjectMan::GetInstance().getObjectModel(m_sModelPath);
+		if (cachedObject != nullptr)
+		{
+			auto& meshList = cachedObject->getMeshList();
+			for each (Mesh* mesh in meshList)
+			{
+				Mesh* newMesh = new Mesh(mesh->getVertexArrayObject());
+				newMesh->setVertexCount(mesh->getVertexCount());
+				m_pMeshList.push_back(newMesh);
+			}
+
+			return;
+		}
+
 		Assimp::Importer assimpImporter;
 
-		const aiScene* pScene = assimpImporter.ReadFile(m_sModelPath.c_str(), 
+		const aiScene* pScene = assimpImporter.ReadFile(m_sModelPath.c_str(),
 			aiProcess_Triangulate |
-			aiProcess_GenSmoothNormals | 
+			aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs |
 			aiProcess_CalcTangentSpace);
 
@@ -95,15 +345,16 @@ namespace Engine
 
 		RecursiveProcess(pScene->mRootNode, pScene);
 	}
-	
-	void 
-	Object::ProcessMesh(aiMesh* pModel)
+
+	// ----------------------------------------------------------------------------
+
+	void Object::ProcessMesh(aiMesh* pModel)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<GLushort> indices;
 
 		const aiVector3D aiZeroVector(0.0f, 0.0f, 0.0f);
-		for( unsigned int i = 0; i < pModel->mNumVertices; i++ ) 
+		for (unsigned int i = 0; i < pModel->mNumVertices; i++)
 		{
 			// Vertex structure to be filled -------------------------------------------
 			Vertex vertex;
@@ -128,7 +379,7 @@ namespace Engine
 			{
 				vertex.normal = glm::vec3(0.0f);
 			}
-			
+
 			// Texture coordinate ------------------------------------------------------
 			glm::vec2 textureCoord;
 			if (pModel->mTextureCoords[0])
@@ -162,7 +413,7 @@ namespace Engine
 
 		// Process indices -------------------------------------------------------------
 
-		for(unsigned int i = 0; i < pModel->mNumFaces; i++)
+		for (unsigned int i = 0; i < pModel->mNumFaces; i++)
 		{
 			aiFace face = pModel->mFaces[i];
 
@@ -176,8 +427,9 @@ namespace Engine
 		m_pMeshList.push_back(new Mesh(&vertices[0], vertices.size(), &indices[0], indices.size()));
 	}
 
-	void 
-	Object::RecursiveProcess(aiNode* pNode, const aiScene* pScene)
+	// ----------------------------------------------------------------------------
+
+	void Object::RecursiveProcess(aiNode* pNode, const aiScene* pScene)
 	{
 		// Process
 		for (unsigned int i = 0; i < pNode->mNumMeshes; i++)
@@ -193,3 +445,5 @@ namespace Engine
 		}
 	}
 }
+
+// ----------------------------------------------------------------------------

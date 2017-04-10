@@ -1,96 +1,127 @@
 #include "ObjectMan.h"
 
-#include "ShaderMan.h"
+#include "TechniqueMan.h"
+#include "GfxStats.h"
+
+// ----------------------------------------------------------------------------
+
+ObjectMan::ObjectMan()
+{
+	// Add UI stats
+	//GfxStats::Instance().addStat("objectUpdate");
+	//GfxStats::Instance().addStat("objectRender");
+}
+
+// ----------------------------------------------------------------------------
 
 ObjectMan::~ObjectMan()
 {
-	std::vector<Engine::Shader*> shaderList = ShaderMan::Instance().GetShaderList();
+	std::list<BaseTechnique*> techList = TechniqueMan::Instance().getTechList();
 
-	for (size_t i = 0; i < shaderList.size(); i++)
+	for (auto it = techList.begin(); it != techList.end(); ++it)
 	{
-		ObjectList objectList = GetObjects(shaderList[i]->ProgramID());
+		BaseTechnique* currentTech = *it;
+		ObjectList objectList = getObjects(currentTech->getProgramID());
 
-		ShaderObjectMap::iterator first		= objectList.first;
-		ShaderObjectMap::iterator last		= objectList.second;
+		TechniqueObjectMap::iterator first		= objectList.first;
+		TechniqueObjectMap::iterator last		= objectList.second;
 
 		for ( ; first != last; first++ )
 		{
-			delete first->second;
+			if (first->second != nullptr)
+			{
+				delete first->second;
+			}
 		}
 	}
 }
 
-// Render all the Meshes which have the specified shader attached
-void ObjectMan::Display(const Engine::Shader* shaderObject)
-{
-	assert(shaderObject != NULL);
-	
-	// Enable the shader
-	shaderObject->Enable();
-	
-	// Perform the rendering step - render all the object which have associated the same shader
-	ObjectList objList = GetObjects(shaderObject->ProgramID());
+// ----------------------------------------------------------------------------
 
-	ShaderObjectMap::iterator first		= objList.first;
-	ShaderObjectMap::iterator last		= objList.second;
+// Render all the Meshes which have the specified shader attached
+void ObjectMan::renderTech(const BaseTechnique* technique, float dt)
+{
+	// Perform the rendering step - render all the object which have associated the same technique
+	ObjectList objList = getObjects(technique->getProgramID());
+
+	// Enable technique
+	technique->enable();
+
+	TechniqueObjectMap::iterator first		= objList.first;
+	TechniqueObjectMap::iterator last		= objList.second;
 
 	for ( ; first != last; first++ )
 	{
-		Engine::Object* currentObject = first->second;
+		// Get a reference to the current object
+		GL::Object* currentObject = first->second;
 
-		// Render using the default shader
-		currentObject->Render();
+		if (currentObject->Name.find("pointLightPBRMesh") != std::string::npos ||
+			currentObject->Name.find("pointLightPhongMesh") != std::string::npos ||
+			currentObject->Name.find("quadObj") != std::string::npos)
+		{
+			// Object is a light source mesh
+			glDisable(GL_CULL_FACE);
+			glEnable(GL_BLEND);
+			//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			glBlendFunc(GL_DST_COLOR, GL_ZERO);
+			glBlendEquation(GL_FUNC_ADD);
+		}
+		else
+		{
+			glEnable(GL_CULL_FACE);
+			glDisable(GL_BLEND);
+		}
+
+		// Render using the associated technique
+		currentObject->update(dt);
+		currentObject->render();
 	}
-
-	// Disable the shader
-	shaderObject->Disable();
 }
+
+// ----------------------------------------------------------------------------
 
 // Add an Mesh to the multimap
-void ObjectMan::AddObject(Engine::Object* Object)
+void ObjectMan::addObject(GL::Object* Object)
 {
-	m_mapShaderObject.insert(std::make_pair(Object->GetShader()->ProgramID(), Object));
+	m_mapTechniqueObject.insert(std::make_pair(Object->getTechnique()->getProgramID(), Object));
+
+	m_mapObjects[Object->getModelPath()] = Object;
 }
 
+// ----------------------------------------------------------------------------
+
 // Render a single object
-void ObjectMan::RenderObject(const std::string& sName)
+void ObjectMan::renderObject(const std::string& sName, float dt)
 {
 	// Perform the rendering step - render the desired object
-	std::multimap <GLuint, Engine::Object*>::iterator first = m_mapShaderObject.begin();
-	std::multimap <GLuint, Engine::Object*>::iterator last = m_mapShaderObject.end();
+	TechniqueObjectMap::iterator start = m_mapTechniqueObject.begin();
+	TechniqueObjectMap::iterator end = m_mapTechniqueObject.end();
 
-	for (; first != last; first++)
+	for (; start != end; start++)
 	{
-		Engine::Object* currentObject = first->second;
+		GL::Object* currentObject = start->second;
 
 		if (strcmp(sName.c_str(), currentObject->Name.c_str()) == 0)
 		{
-			Engine::Shader* tempShader = currentObject->GetShader();
-
-			assert(tempShader != NULL);
-
-			// Enable the shader
-			tempShader->Enable();
-
-			// Render using the default shader
-			currentObject->Render();
-
-			// Disable the shader
-			tempShader->Disable();
+			currentObject->getTechnique()->enable();
+			currentObject->update(dt);
+			currentObject->render();
 		}
 	}
 }
 
+// ----------------------------------------------------------------------------
+
 // Get an object
-Engine::Object* ObjectMan::GetObject(const std::string& sName)
+GL::Object* ObjectMan::getObject(const std::string& sName)
 {
 	// Perform the rendering step - render the desired object
-	std::multimap <GLuint, Engine::Object*>::iterator first = m_mapShaderObject.begin();
-	std::multimap <GLuint, Engine::Object*>::iterator last = m_mapShaderObject.end();
+	TechniqueObjectMap::iterator first = m_mapTechniqueObject.begin();
+	TechniqueObjectMap::iterator last = m_mapTechniqueObject.end();
 
 	for (; first != last; first++)
 	{
-		Engine::Object* currentObject = first->second;
+		GL::Object* currentObject = first->second;
 
 		if (strcmp(sName.c_str(), currentObject->Name.c_str()) == 0)
 		{
@@ -101,19 +132,44 @@ Engine::Object* ObjectMan::GetObject(const std::string& sName)
 	return nullptr;
 }
 
-// Get the list of Meshes which have the same shader associated
-ObjectList ObjectMan::GetObjects(GLuint programID)
-{
-	return m_mapShaderObject.equal_range(programID);
-}
+// ----------------------------------------------------------------------------
 
-void 
-ObjectMan::Render(float dt)
+GL::Object* ObjectMan::getObjectModel(const std::string& sModelPath)
 {
-	std::vector<Engine::Shader*> shaderList = ShaderMan::Instance().GetShaderList();
-
-	for (size_t i = 0; i < shaderList.size(); i++)
+	auto& it = m_mapObjects.find(sModelPath);
+	if (it != m_mapObjects.end())
 	{
-		Display(shaderList[i]);
+		return it->second;
+	}
+	else
+	{
+		return nullptr;
 	}
 }
+
+// ----------------------------------------------------------------------------
+
+// Get the list of meshes which have the same technique associated
+ObjectList ObjectMan::getObjects(GLuint programID)
+{
+	return m_mapTechniqueObject.equal_range(programID);
+}
+
+// ----------------------------------------------------------------------------
+
+void 
+ObjectMan::renderAll(float dt)
+{
+	GfxStats::Instance().startMeasurement("objectRender");
+
+	std::list<BaseTechnique*> techList = TechniqueMan::Instance().getTechList();
+
+	for (auto it = techList.begin(); it != techList.end(); ++it)
+	{
+		renderTech(*it, dt);
+	}
+
+	GfxStats::Instance().endMeasurement("objectRender");
+}
+
+// ----------------------------------------------------------------------------

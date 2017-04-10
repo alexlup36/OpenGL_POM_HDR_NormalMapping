@@ -1,13 +1,13 @@
 #include "Core.h"
 
 #include "Common.h"
-#include "ShaderMan.h"
+//#include "ShaderMan.h"
 #include "CameraMan.h"
 #include "GfxStats.h"
 
-GLFWwindow* Core::Window = NULL;
-float Core::MouseSpeed = 0.5f;
-float Core::KeyboardSpeed = 100.0f;
+GLFWwindow* Core::Window = nullptr;
+float Core::MouseSpeed = 0.08f;
+float Core::KeyboardSpeed = 15.0f;
 
 // ----------------------------------------------------------------------------------------------
 Core::Core() 
@@ -48,9 +48,23 @@ int Core::InitializeGL()
 	}
 
 	// Set OpenGL version
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	glfwWindowHint(GLFW_SAMPLES, 0);
+	glfwWindowHint(GLFW_RED_BITS, 8);
+	glfwWindowHint(GLFW_GREEN_BITS, 8);
+	glfwWindowHint(GLFW_BLUE_BITS, 8);
+	glfwWindowHint(GLFW_ALPHA_BITS, 8);
+	glfwWindowHint(GLFW_STENCIL_BITS, 8);
+	glfwWindowHint(GLFW_DEPTH_BITS, 24);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	// Full screen or window 
 #if X_FULLSCREEN
@@ -61,7 +75,7 @@ int Core::InitializeGL()
 			WINDOW_HEIGHT, 
 			"GL Demo", 
 			glfwGetPrimaryMonitor(), 
-			NULL);
+			nullptr);
 	}
 #else
 	{
@@ -70,13 +84,13 @@ int Core::InitializeGL()
 			WINDOW_WIDTH, 
 			WINDOW_HEIGHT, 
 			"GL Demo", 
-			NULL, 
-			NULL);
+			nullptr, 
+			nullptr);
 	}
 #endif // X_FULLSCREEN
 	
 
-	if (Window == NULL)
+	if (Window == nullptr)
 	{
 		glfwTerminate();
 		fprintf( stderr, "Failed to open GLFW window.\n" );
@@ -109,7 +123,10 @@ void Core::SetWindowProperties(const char* windowTitle)
 	glfwSetInputMode(Window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Hide the mouse cursor
-	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// Set the mouse scroll callback
+	glfwSetScrollCallback(Window, Input::scrollCallback);
 }
 
 void Core::SetGLState()
@@ -122,7 +139,7 @@ void Core::SetGLState()
 	// Disable vsync
 	glfwSwapInterval(0);
 
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);

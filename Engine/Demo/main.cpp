@@ -1,20 +1,26 @@
-#include "MyEngine.h"
+#include "TestGLApp.h"
 #include "Core.h"
+#include "MappedProperties.h"
 
-//GLFWwindow* Core::Window = NULL;
+#include <thread>
+
+void watchdog()
+{
+	MappedProperties::GetInstance().watchDir(".\\data\\test.txt", "C:\\disk\\programming\\opengl\\OpenglRenderingFramework2\\Engine\\Demo\\data");
+}
 
 int main(int argc, char* argv[])
 {
-	MyEngine* engine = new MyEngine();
+	TestGLApp* app = new TestGLApp();
+	
+	std::thread watchdogThread(watchdog);
 
-	// Initialize the engine's window
-	if (!engine->Initialize())
+	// Initialize the engine
+	if (!app->Initialize())
 	{
-		fprintf(stderr, "Failed to initialize GL\n");
+		std::cout << "Failed to initialize GL.\n";
 		return 0;
 	}
-	// Set the properties of the engine's window
-	engine->SetWindowProperties("TechDemo");
 
 	do
 	{
@@ -24,8 +30,8 @@ int main(int argc, char* argv[])
 		float dt = float(currentTime - lastTime);
 
 		// Processing
-		engine->Update(dt);
-		engine->Draw(dt);
+		app->Update(dt);
+		app->Draw(dt);
 
 		lastTime = currentTime;
 	} 
@@ -34,7 +40,8 @@ int main(int argc, char* argv[])
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
 
-	delete engine;
+	watchdogThread.join();
+	delete app;
 
 	return 0;
 }

@@ -1,0 +1,19 @@
+# test sphere 
+ambientOcclusion = 0.5
+metallic = 0.3
+roughness = 0.3
+albedoX = 0.1
+albedoY = 0.5
+albedoZ = 0.1
+# pbr light position
+pointLight1PosX = 20.0
+pointLight1PosY = 20.0
+pointLight1PosZ = 70.0
+# pbr light attenuation
+pointLight1AttX = 0.1
+pointLight1AttY = 0.1
+pointLight1AttZ = 1.0
+# phong light position
+pointLight2PosX = 50.0
+pointLight2PosY = 30.0
+pointLight2PosZ = 10.0

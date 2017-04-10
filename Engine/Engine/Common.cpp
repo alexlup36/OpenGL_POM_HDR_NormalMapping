@@ -14,14 +14,14 @@ void Log( const char* szTag, const char* szMessage )
 #endif
 }
 
-void GLErrorCheck(const char* szMessage /*=NULL*/)
+void GLErrorCheck(const char* szMessage /*=nullptr*/)
 {
 #if DEBUG
 	GLenum checkResult = glGetError();
 
 	if (checkResult != GL_NO_ERROR)
 	{
-		if (szMessage != NULL)
+		if (szMessage != nullptr)
 		{
 			std::cout << szMessage << " - ";
 		}

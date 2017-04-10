@@ -4,7 +4,7 @@
 
 CameraMan::CameraMan(void)
 {
-	m_pActiveCamera = NULL;
+	m_pActiveCamera = nullptr;
 }
 
 
@@ -14,14 +14,15 @@ CameraMan::~CameraMan(void)
 }
 
 // Create camera
-Camera* 
+Camera2* 
 CameraMan::CreateCamera(const char* camName, float fFOV, float fNearPlane, float fFarPlane)
 {
 	// Create a new default camera
-	Camera* newCamera = new Camera(camName);
+	Camera2* newCamera = new Camera2(camName);
 
 	// Set the projection matrix for the camera
 	newCamera->SetProjection(fFOV, WINDOW_WIDTH, WINDOW_HEIGHT, fNearPlane, fFarPlane);
+	newCamera->SetOrthoProjection(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 5.0f);
 
 	// If no active camera set it to the new created camera
 	if (!m_pActiveCamera)
@@ -41,24 +42,26 @@ CameraMan::CreateCamera(const char* camName, float fFOV, float fNearPlane, float
 
 // Set the active camera
 void 
-CameraMan::SetActiveCamera(Camera* newCamera)
+CameraMan::SetActiveCamera(Camera2* newCamera)
 {
+	assert(newCamera != nullptr);
 	m_pActiveCamera = newCamera;
 }
 
 // Get the active camera
-Camera* 
+Camera2* 
 CameraMan::GetActiveCamera()
 {
+	assert(m_pActiveCamera != nullptr);
 	return m_pActiveCamera;
 }
 
 // Get camera
-Camera* 
+Camera2* 
 CameraMan::GetCamera(const char* camName)
 {
 	// Iterator for the list of cameras
-	std::vector<Camera*>::const_iterator camIterator = m_pCameraList.begin();
+	std::vector<Camera2*>::const_iterator camIterator = m_pCameraList.begin();
 
 	while (camIterator != m_pCameraList.end())
 	{
@@ -71,10 +74,10 @@ CameraMan::GetCamera(const char* camName)
 	}
 
 	std::cout << "Camera " << camName << "not found." << std::endl;
-	return NULL;
+	return nullptr;
 }
 
-Camera* 
+Camera2* 
 CameraMan::GetCamera(int index)
 {
 	return m_pCameraList[index];
@@ -84,15 +87,16 @@ CameraMan::GetCamera(int index)
 void 
 CameraMan::Update(float dt)
 {
+	if (m_pActiveCamera)
 	m_pActiveCamera->UpdateMatrices(dt);
 }
 
 void 
 CameraMan::UpdateCamera(float dt, const char* camName)
 {
-	Camera* temp = GetCamera(camName);
+	Camera2* temp = GetCamera(camName);
 
-	if (temp != NULL)
+	if (temp != nullptr)
 	{
 		temp->UpdateMatrices(dt);
 	}
@@ -101,9 +105,9 @@ CameraMan::UpdateCamera(float dt, const char* camName)
 void 
 CameraMan::UpdateCamera(float dt, int index)
 {
-	Camera* temp = GetCamera(index);
+	Camera2* temp = GetCamera(index);
 
-	if (temp != NULL)
+	if (temp != nullptr)
 	{
 		temp->UpdateMatrices(dt);
 	}

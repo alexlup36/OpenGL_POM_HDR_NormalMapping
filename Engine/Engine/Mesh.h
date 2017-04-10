@@ -29,12 +29,19 @@ class Mesh
 public:
 	// Constructor
 	Mesh(const Vertex* vertexData, size_t vertexCount, const GLushort* indexData, size_t indexCount);
+	Mesh(GLuint vertexArrayObject)
+		: m_uiVertexArrayObject(vertexArrayObject) {}
 
 	// Destructor
 	virtual ~Mesh();
 
 	// Methods ----------------------------------------------------------------
 	void Render() const;
+
+	const GLuint getVertexArrayObject() const { return m_uiVertexArrayObject; }
+	const size_t getVertexCount() const { return m_uiVertexCount; }
+
+	void setVertexCount(size_t vertexCount) { m_uiVertexCount = vertexCount; }
 
 private:
 

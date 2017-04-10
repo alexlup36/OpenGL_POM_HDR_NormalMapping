@@ -2,10 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MyEngine.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MyEngine.h" />
+    <ClCompile Include="TestGLApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\skyboxVS.glsl" />
@@ -20,5 +17,8 @@
     <None Include="Shaders\reflectionFS.glsl" />
     <None Include="Shaders\quadRenderVS.glsl" />
     <None Include="Shaders\quadRenderFS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestGLApp.h" />
   </ItemGroup>
 </Project>

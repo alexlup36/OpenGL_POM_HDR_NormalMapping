@@ -3,7 +3,7 @@
 #include <SOIL2.h>
 
 #include "ObjectMan.h"
-#include "ShaderMan.h"
+//#include "ShaderMan.h"
 #include "CameraMan.h"
 #include "stb_image.h"
 
@@ -38,7 +38,7 @@ Skybox::LoadShaders()
 	// Initialize shaders
 	m_pSkyboxShader = new Engine::Shader(".\\Shaders\\skybox.vert", ".\\Shaders\\skybox.frag");
 
-	GLErrorCheck("MyEngine::LoadShaders");
+	GLErrorCheck("TestGLApp::LoadShaders");
 }
 
 GLuint 

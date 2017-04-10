@@ -2,19 +2,19 @@
 #define __OBJECTMAN_H__
 
 #include <map>
+#include <string>
 
-#include "Shader.h"
+#include "BaseTechnique.h"
 #include "Object.h"
 
-#include "GameComponent.h"
 
+// ----------------------------------------------------------------------------
+// Types
+typedef std::multimap<GLuint, GL::Object*> TechniqueObjectMap;
+typedef std::pair<TechniqueObjectMap::iterator, TechniqueObjectMap::iterator> ObjectList;
 
-// Types ----------------------------------------------------------------------------------
-typedef std::multimap<GLuint, Engine::Object*>			ShaderObjectMap;
-typedef std::pair<ShaderObjectMap::iterator, ShaderObjectMap::iterator>		ObjectList;
-
-// ----------------------------------------------------------------------------------------------
-class ObjectMan : public GameComponent
+// ----------------------------------------------------------------------------
+class ObjectMan
 {
 public:
 	~ObjectMan();
@@ -26,25 +26,29 @@ public:
 	}
 
 	// Specific methods --------------------------------------
-	void AddObject(Engine::Object*);
-	void RenderObject(const std::string& sName);
-	Engine::Object* GetObject(const std::string& sName);
 
-	// Override ----------------------------------------------
-	virtual void Render(float dt);
+	// Object management
+	void addObject(GL::Object*);
+	GL::Object* getObject(const std::string& sName);
+	GL::Object* getObjectModel(const std::string& sModelPath);
+	// Render methods
+	void renderAll(float dt);
+	void renderObject(const std::string& sName, float dt);
+	// Getter method
+	ObjectList getObjects(GLuint programID);
 
 private:
 	// Singleton class
-	ObjectMan() {}
+	ObjectMan();
 	ObjectMan(ObjectMan const&) = delete;              // Don't Implement.
 	void operator=(ObjectMan const&) = delete;		  // Don't implement
 
 	// Methods
-	ObjectList GetObjects(GLuint programID);
-	virtual void Display(const Engine::Shader* shaderObject);
+	void renderTech(const BaseTechnique* technique, float dt);
 
 	// Data
-	std::multimap <GLuint, Engine::Object*> m_mapShaderObject;
+	TechniqueObjectMap m_mapTechniqueObject;
+	std::map<std::string, GL::Object*> m_mapObjects;
 };
 
 

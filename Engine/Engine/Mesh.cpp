@@ -18,6 +18,8 @@ Mesh::Mesh(const Vertex* vertexData, size_t vertexCount, const GLushort* indexDa
 	Initialize(vertexData, vertexCount, indexData, indexCount, true);
 }
 
+// ----------------------------------------------------------------------------
+
 // Destructor
 Mesh::~Mesh()
 {
@@ -27,6 +29,8 @@ Mesh::~Mesh()
 	// Delete the vertex array object
 	glDeleteVertexArrays( 1, &m_uiVertexArrayObject );
 }
+
+// ----------------------------------------------------------------------------
 
 // Create the vertex and index buffers and initialize them
 void Mesh::Initialize(const Vertex* vertexData, size_t vertexCount, const GLushort* indexData, size_t indexCount, bool bCalcNormals)
@@ -71,6 +75,8 @@ void Mesh::Initialize(const Vertex* vertexData, size_t vertexCount, const GLusho
 	glBindVertexArray( 0 );
 }
 
+// ----------------------------------------------------------------------------
+
 // Compute mesh normals
 void Mesh::CalcNormals(Vertex* vertexData, size_t vertexCount, GLushort* indexData, size_t indexCount)
 {
@@ -96,16 +102,24 @@ void Mesh::CalcNormals(Vertex* vertexData, size_t vertexCount, GLushort* indexDa
 	}
 }
 
+// ----------------------------------------------------------------------------
+
 // Render Mesh
 void Mesh::Render() const
 {
+	GLClearErrors();
+
 	// Bind the vertex array object
 	glBindVertexArray( m_uiVertexArrayObject );
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// Draw call
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_uiVertexCount, GL_UNSIGNED_SHORT, 0);
 
 	glBindVertexArray( 0 );
+
+	GLErrorCheck("MeshRender");
 }
+
+// ----------------------------------------------------------------------------

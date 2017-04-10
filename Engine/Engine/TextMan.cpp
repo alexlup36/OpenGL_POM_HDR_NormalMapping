@@ -1,5 +1,8 @@
 #include "TextMan.h"
 
+#include <vector>
+
+#include "TechniqueMan.h"
 
 TextMan::TextMan(void)
 {
@@ -15,31 +18,37 @@ TextMan::~TextMan(void)
 	// Delete texture
 	GLuint textureID = m_pTextTexture->GetHandler();
 	glDeleteTextures(1, &textureID);
-
-	// Delete shader
-	glDeleteProgram(m_pTextShader->ProgramID());
 }
 
 void 
 TextMan::Initialize(const char* sFontTexturePath)
-{
-	m_pTextShader = new Engine::Shader(".\\Shaders\\text.vert", ".\\Shaders\\text.frag");
-
-	m_pTextShader->Enable();
+{	
+	// Create text technique
+	m_pTextTechnique = new TextTechnique();
+	if (m_pTextTechnique->init() == false)
+	{
+		std::cout << "Failed to init TextTechnique. \n";
+		return;
+	}
+	else
+	{
+		// Add technique to the tech manager
+		TechniqueMan::Instance().registerTechnique(m_pTextTechnique);
+	}
 
 	// Initialize texture
-	m_pTextTexture = new Engine::Texture(sFontTexturePath, TextureType::Diffuse, true, false);
+	m_pTextTexture = new Texture(sFontTexturePath, TextureType::Diffuse, true, false);
 
 	// Create the vertex buffer and UV buffer
 	glGenBuffers(1, &m_Text2DVertexBufferID);
 	glGenBuffers(1, &m_Text2DUVBufferID);
-
-	m_pTextShader->Disable();
 }
 
 void 
 TextMan::PrintText(const char* sText, int x, int y, int size)
 {
+	GLClearErrors();
+
 	size_t length = strlen(sText);
 
 	// Fill buffers
@@ -88,10 +97,10 @@ TextMan::PrintText(const char* sText, int x, int y, int size)
 	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);
 
 	// Enable the text shader
-	m_pTextShader->Enable();
+	m_pTextTechnique->enable();
 
 	// Bind texture
-	m_pTextTexture->Bind(0, m_pTextShader->ProgramID());
+	m_pTextTexture->Bind(0, m_pTextTechnique->getProgramID());
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -116,6 +125,5 @@ TextMan::PrintText(const char* sText, int x, int y, int size)
 
 	glBindVertexArray(0);
 
-	// Disable the text shader
-	m_pTextShader->Disable();
+	GLErrorCheck("TextMan - PrintText: ");
 }

@@ -24,8 +24,8 @@ private:
 	GLuint m_uiSkyboxTextureHandle;
 	GLuint m_uiUniformSkyboxTextureHandle;
 
-	Engine::Object* m_pSkyboxCube;
-	Engine::Shader* m_pSkyboxShader;
+	Object* m_pSkyboxCube;
+	//Shader* m_pSkyboxShader;
 };
 
 #endif // __SKYBOX_H__

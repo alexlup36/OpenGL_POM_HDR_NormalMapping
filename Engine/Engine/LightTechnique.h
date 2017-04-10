@@ -1,11 +1,13 @@
 #ifndef __LIGHTTECHNIQUE_H__
 #define  __LIGHTTECHNIQUE_H__
 
+#include <vector>
+
+#include "Common.h"
+
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "glm/mat4x4.hpp"
-
-#include "Shader.h"
 
 #define MAX_POINT_LIGHTS 2
 #define MAX_SPOT_LIGHT 1
@@ -146,7 +148,7 @@ struct PointLightLocation
 class LightTechnique
 {
 public:
-	LightTechnique(Engine::Shader* pShader);
+	LightTechnique(/*Shader* pShader*/);
 	~LightTechnique();
 
 	// Methods
@@ -163,7 +165,7 @@ public:
 	void SetEyePosWorld(const glm::vec3& eyePositionWorld);
 
 private:
-	Engine::Shader* m_pShaderInstance;
+	//Shader* m_pShaderInstance;
 
 	float m_fGamma;
 	float m_fDisplacementMapScale;

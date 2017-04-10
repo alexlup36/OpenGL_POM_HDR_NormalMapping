@@ -12,29 +12,27 @@ enum class TextureType
 	Displacement,
 };
 
-namespace Engine
+class Texture
 {
-	class Texture
-	{
-	public:
-		Texture( GLuint textureHandler );
-		Texture(const std::string sFileName, TextureType type, bool bImmutableStorage, bool bEnableMipmaps = false);
-		virtual ~Texture();
+public:
+	Texture( GLuint textureHandler );
+	Texture(const std::string& sFileName, TextureType type, bool bImmutableStorage, bool bEnableMipmaps = false);
+	virtual ~Texture();
 
-		static void CreateTexture(int iWidth, int iHeight, bool bDepth, GLuint& uiTextureID);
-		void Bind(unsigned int unit, GLuint program);
-		GLuint GetHandler();
+	static void CreateTexture(int iWidth, int iHeight, bool bDepth, GLuint& uiTextureID);
+	void Bind(unsigned int unit, GLuint program);
+	GLuint GetHandler();
+	inline const std::string& getPath() const { return m_sTexturePath; }
 
-	protected:
+protected:
 
-	private:
-		Texture( const Texture& other ) {}
-		void operator=( const Texture& other ) {}
+private:
+	Texture( const Texture& other ) {}
+	void operator=( const Texture& other ) {}
 
-		GLuint m_uiTexture;
-
-		bool m_bSRGB;
-	};
-}
+	GLuint m_uiTexture;
+	bool m_bSRGB;
+	std::string m_sTexturePath;
+};
 
 #endif // __TEXTURE_H__

@@ -4,14 +4,13 @@
 // ----------------------------------------------------------------------------
 
 #include "Common.h"
-#include "Shader.h"
 
 // ----------------------------------------------------------------------------
 
 class HDRLightingTechnique
 {
 public:
-	HDRLightingTechnique(Engine::Shader* shader);
+	HDRLightingTechnique();
 	~HDRLightingTechnique();
 
 	void SetExposure(GLfloat exposure);
@@ -19,9 +18,6 @@ public:
 	void SetGamma(GLfloat gamma);
 
 private:
-
-	// Current shader instance
-	Engine::Shader* m_pCurrentShaderInstance;
 
 	// Shader locations
 	GLint m_iExposureLocation;

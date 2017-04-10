@@ -9,21 +9,23 @@ out vec2 texCoord;
 out vec3 vertexW;
 out vec3 normalW;
 
-uniform mat4 mMatrix;
+uniform mat4 wvpMatrix;
 uniform mat4 vMatrix;
 uniform mat4 pMatrix;
+uniform mat4 wMatrix;
 uniform mat4 nMatrix;
 
 void main()
 {
 	// Calculate fragment position in screen space
-	gl_Position = pMatrix * vMatrix * mMatrix * vec4(vertexPosition, 1.0f);
+	gl_Position = pMatrix * vMatrix * wMatrix * vec4(vertexPosition, 1.0f);
+	gl_Position = wvpMatrix * vec4(vertexPosition, 1.0f);
 	
 	// Calculate vertex position in world coordinates
-	vertexW 	= vec3(mMatrix * vec4(vertexPosition, 1.0f));
+	vertexW 	= vec3(wMatrix * vec4(vertexPosition, 1.0f));
 	// Calculate normal direction in world coordinates
 	normalW 	= normalize((nMatrix * vec4(vertexNormal, 0.0f)).xyz);
 	
 	// Pass the texture coordinates
-	texCoord	= vertexTexCoord;	
+	texCoord	= vertexTexCoord;
 }

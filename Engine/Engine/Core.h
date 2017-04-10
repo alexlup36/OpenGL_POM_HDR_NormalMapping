@@ -1,9 +1,7 @@
 #ifndef __Core_H__
 #define __Core_H__
 
-#include "Shader.h"
 #include "Texture.h"
-#include "Transform.h"
 
 class Core
 {

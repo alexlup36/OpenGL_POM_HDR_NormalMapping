@@ -7,7 +7,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-
+// ----------------------------------------------------------------------------
 
 //***Default camera***
 // Position 0.0f, 0.0f, 0.0f
@@ -18,8 +18,8 @@
 // WindowWidth Default
 // WindowHeight Default
 Camera::Camera(const char* cameraName)
-	: m_vCameraPosition(0.0f, 0.0f, -5.0f),
-	m_vCameraTarget(1.0f, 0.0f, 0.0f),
+	: m_vCameraPosition(0.0f, 0.0f, 0.0f),
+	m_vCameraTarget(5.0f, 0.0f, 0.0f),
 	m_vCameraUp(0.0f, 1.0f, 0.0f),
 	m_fNearClippingPlane(0.1f),
 	m_fFarClippingPlane(3000.0f),
@@ -41,6 +41,8 @@ Camera::Camera(const char* cameraName)
 	glfwSetCursorPos(Core::Window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 }
 
+// ----------------------------------------------------------------------------
+
 Camera::Camera(
 		glm::vec3& position, 
 		glm::vec3& target, 
@@ -48,8 +50,6 @@ Camera::Camera(
 		GLfloat near, 
 		GLfloat far, 
 		GLfloat fieldOfView,
-		unsigned int windowWidth, 
-		unsigned int windowHeight,
 		const char* cameraName)
 	: m_vCameraPosition(position),
 	m_vCameraTarget(target),
@@ -74,11 +74,14 @@ Camera::Camera(
 	glfwSetCursorPos(Core::Window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 }
 
+// ----------------------------------------------------------------------------
+
 Camera::~Camera(void)
 {
 	delete CameraName;
 }
 
+// ----------------------------------------------------------------------------
 
 // Initialize view matrix
 void Camera::SetView()
@@ -86,67 +89,32 @@ void Camera::SetView()
 	m_ViewMatrix = glm::lookAt(this->m_vCameraPosition, this->m_vCameraTarget, this->m_vCameraUp);
 }
 	
+// ----------------------------------------------------------------------------
+
 // Initialize projection matrix
 void Camera::SetProjection(float fov, unsigned int width, unsigned int height, float near, float far)
 {
 	this->m_fFOV = fov;
 	this->m_fNearClippingPlane = near;
 	this->m_fFarClippingPlane = far;
+	UpdateProjection();
+}
 
-	// Update the projection matrix
+// ----------------------------------------------------------------------------
+
+void Camera::UpdateProjection()
+{
 	m_ProjectionMatrix = glm::perspective(this->m_fFOV, (float)WINDOW_WIDTH / WINDOW_HEIGHT, m_fNearClippingPlane, m_fFarClippingPlane);
 }
+
+// ----------------------------------------------------------------------------
 
 void Camera::SetOrthoProjection(float left, float right, float bottom, float top, float near, float far)
 {
 	m_ProjectionMatrix = glm::ortho(left, right, bottom, top, near, far);
 }
 
-// Getters
-glm::mat4 Camera::ProjectionMatrix()
-{
-	return m_ProjectionMatrix;
-}
-
-glm::mat4 Camera::ViewMatrix()
-{
-	return m_ViewMatrix;
-}
-
-glm::vec3 Camera::GetCameraPosition()
-{
-	return m_vCameraPosition;
-}
-
-glm::vec3 Camera::GetCameraTarget()
-{
-	return m_vCameraTarget;
-}
-	
-glm::vec3 Camera::GetCameraUp()
-{
-	return m_vCameraUp;
-}
-
-	
-// Setters
-void Camera::SetPosition(const glm::vec3& pos)
-{
-	m_vCameraPosition = pos;
-	m_bChange = true;
-}
-	
-void Camera::SetTarget(const glm::vec3& targ)
-{
-	m_vCameraTarget = targ;
-	m_bChange = true;
-}
-	
-void Camera:: SetUp(const glm::vec3& up)
-{
-	m_vCameraUp = up;
-	m_bChange = true;
-}
+// ----------------------------------------------------------------------------
 
 void Camera::UpdateMatrices(float dt)
 {
@@ -166,13 +134,16 @@ void Camera::UpdateMatrices(float dt)
 		cos(m_fVerticalAngle) * sin(m_fHorizontalAngle),
 		sin(m_fVerticalAngle),
 		cos(m_fVerticalAngle) * cos(m_fHorizontalAngle));
+	direction = glm::normalize(direction);
 
 	glm::vec3 right(
-		sin(m_fHorizontalAngle - M_PI / 2),
+		sin(m_fHorizontalAngle - M_PI_2),
 		0.0f,
-		cos(m_fHorizontalAngle - M_PI / 2));
+		cos(m_fHorizontalAngle - M_PI_2));
+	right = glm::normalize(right);
 
-	glm::vec3 up(glm::cross(right, direction));
+	glm::vec3 up(glm::cross(direction, right));
+	up = glm::normalize(up);
 
 	// Input update
 	Input::Update(dt, m_vCameraPosition, direction, right);
@@ -190,10 +161,17 @@ void Camera::UpdateMatrices(float dt)
 
 		m_bChange = false;
 	}
+
+	// Update view-projection matrix
+	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 }
+
+// ----------------------------------------------------------------------------
 
 void Camera::LoadIndentity()
 {
 	m_ProjectionMatrix = glm::mat4(1.0f);
 	m_ViewMatrix = glm::mat4(1.0f);
 }
+
+// ----------------------------------------------------------------------------

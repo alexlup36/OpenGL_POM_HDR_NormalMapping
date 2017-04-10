@@ -14,6 +14,8 @@ public:
 	// Update input
 	static void Update(float dt, glm::vec3& newPosition, const glm::vec3& direction, const glm::vec3& right);
 
+	static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+
 	// Mouse position
 	static double X_MOUSEPOS;
 	static double Y_MOUSEPOS;

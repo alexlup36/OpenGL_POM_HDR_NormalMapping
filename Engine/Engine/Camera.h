@@ -1,14 +1,21 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
+// ----------------------------------------------------------------------------
+
 #include "Common.h"
 #include <glm\gtc\matrix_transform.hpp>
 
 #include "Input.h"
 
+// ----------------------------------------------------------------------------
+
 class Camera
 {
 public:
+
+	// ----------------------------------------------------------------------------
+
 	Camera(const char* cameraName);
 	Camera(
 		glm::vec3& position, 
@@ -17,30 +24,35 @@ public:
 		GLfloat near, 
 		GLfloat far, 
 		GLfloat fieldOfView,
-		unsigned int windowWidth, 
-		unsigned int windowHeight,
 		const char* cameraName);
+
+	// ----------------------------------------------------------------------------
 
 	// Initialize view matrix
 	void SetView();
 	// Initialize projection matrix
 	void SetProjection(float fov, unsigned int width, unsigned int height, float near, float far);
+	void UpdateProjection();
 	void SetOrthoProjection(float left, float right, float bottom, float top, float near, float far);
 
+	// ----------------------------------------------------------------------------
 	// Getters
-	glm::mat4 ProjectionMatrix();
-	glm::mat4 ViewMatrix();
-	glm::vec3 GetCameraPosition();
-	glm::vec3 GetCameraTarget();
-	glm::vec3 GetCameraUp();
+	const inline glm::mat4 ProjectionMatrix() const { return m_ProjectionMatrix; }
+	const inline glm::mat4 ViewMatrix() const { return m_ViewMatrix; }
+	const inline glm::mat4 ViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
+	const inline glm::vec3 GetCameraPosition() const { return m_vCameraPosition; }
+	const inline glm::vec3 GetCameraTarget() const { return m_vCameraTarget; }
+	const inline GLfloat GetCameraFOV() const { return m_fFOV; }
 
+	// ----------------------------------------------------------------------------
 	// Setters
-	void SetPosition(const glm::vec3& pos);
-	void SetTarget(const glm::vec3& targ);
-	void SetUp(const glm::vec3& up);
+	inline void SetPosition(const glm::vec3& pos) { m_vCameraPosition = pos; m_bChange = true; }
+	inline void SetTarget(const glm::vec3& targ) { m_vCameraTarget = targ; m_bChange = true; }
+	inline void SetCameraFOV(GLfloat fov) { m_fFOV = fov; }
+
+	// ----------------------------------------------------------------------------
 
 	void UpdateMatrices(float dt);
-
 	void LoadIndentity();
 
 	virtual ~Camera(void);
@@ -62,6 +74,7 @@ private:
 	// Transformation matrices
 	glm::mat4 m_ProjectionMatrix;
 	glm::mat4 m_ViewMatrix;
+	glm::mat4 m_ViewProjectionMatrix;
 
 	// Camera orientation
 	GLfloat m_fHorizontalAngle;

@@ -1,12 +1,11 @@
 #ifndef __CAMERAMAN_H__
 #define __CAMERAMAN_H__
 
-#include "Camera.h"
-#include "GameComponent.h"
+#include "Camera2.h"
 
 #include <vector>
 
-class CameraMan : public GameComponent
+class CameraMan
 {
 private:
 	CameraMan(void);
@@ -29,19 +28,19 @@ public:
 	void UpdateCamera(float dt, int index);
 
 	// Create camera
-	Camera* CreateCamera(const char* camName, float fFOV, float fNearPlane, float fFarPlane);
+	Camera2* CreateCamera(const char* camName, float fFOV, float fNearPlane, float fFarPlane);
 	// Set the active camera
-	void SetActiveCamera(Camera* newCamera);
+	void SetActiveCamera(Camera2* newCamera);
 	// Get the active camera
-	Camera* GetActiveCamera();
+	Camera2* GetActiveCamera();
 	// Get camera
-	Camera* GetCamera(const char* camName);
-	Camera* GetCamera(int index);
+	Camera2* GetCamera(const char* camName);
+	Camera2* GetCamera(int index);
 
 private:
-	Camera* m_pActiveCamera;
+	Camera2* m_pActiveCamera;
 
-	std::vector<Camera*> m_pCameraList;
+	std::vector<Camera2*> m_pCameraList;
 };
 
 #endif // _CAMERAMAN_H__

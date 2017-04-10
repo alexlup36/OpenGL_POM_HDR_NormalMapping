@@ -2,10 +2,8 @@
 
 // ----------------------------------------------------------------------------
 
-HDRLightingTechnique::HDRLightingTechnique(Engine::Shader* shader)
+HDRLightingTechnique::HDRLightingTechnique()
 {
-	m_pCurrentShaderInstance = shader;
-
 	m_iExposureLocation = -1;
 	m_iHDREnabledLocation = -1;
 	m_iGammaLocation = -1;
@@ -21,7 +19,7 @@ HDRLightingTechnique::~HDRLightingTechnique()
 
 void HDRLightingTechnique::SetExposure(GLfloat exposure)
 {
-	m_pCurrentShaderInstance->Enable();
+	//m_pCurrentShaderInstance->Enable();
 
 	if (m_iExposureLocation != -1)
 	{
@@ -29,7 +27,7 @@ void HDRLightingTechnique::SetExposure(GLfloat exposure)
 	}
 	else
 	{
-		m_iExposureLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "exposure");
+		//m_iExposureLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "exposure");
 		if (m_iExposureLocation != -1)
 		{
 			glUniform1f(m_iExposureLocation, exposure);
@@ -40,14 +38,14 @@ void HDRLightingTechnique::SetExposure(GLfloat exposure)
 		}
 	}
 
-	m_pCurrentShaderInstance->Disable();
+	//m_pCurrentShaderInstance->Disable();
 }
 
 // ----------------------------------------------------------------------------
 
 void HDRLightingTechnique::SetHDREnabled(GLboolean hdrEnabled)
 {
-	m_pCurrentShaderInstance->Enable();
+	//m_pCurrentShaderInstance->Enable();
 
 	if (m_iHDREnabledLocation != -1)
 	{
@@ -55,7 +53,7 @@ void HDRLightingTechnique::SetHDREnabled(GLboolean hdrEnabled)
 	}
 	else
 	{
-		m_iHDREnabledLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "hdrEnabled");
+		//m_iHDREnabledLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "hdrEnabled");
 		if (m_iHDREnabledLocation != -1)
 		{
 			glUniform1i(m_iHDREnabledLocation, hdrEnabled);
@@ -66,14 +64,14 @@ void HDRLightingTechnique::SetHDREnabled(GLboolean hdrEnabled)
 		}
 	}
 
-	m_pCurrentShaderInstance->Disable();
+	//m_pCurrentShaderInstance->Disable();
 }
 
 // ----------------------------------------------------------------------------
 
 void HDRLightingTechnique::SetGamma(GLfloat gamma)
 {
-	m_pCurrentShaderInstance->Enable();
+	//m_pCurrentShaderInstance->Enable();
 
 	if (m_iGammaLocation != -1)
 	{
@@ -81,7 +79,7 @@ void HDRLightingTechnique::SetGamma(GLfloat gamma)
 	}
 	else
 	{
-		m_iGammaLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "gamma");
+		//m_iGammaLocation = glGetUniformLocation(m_pCurrentShaderInstance->ProgramID(), "gamma");
 		if (m_iGammaLocation != -1)
 		{
 			glUniform1f(m_iGammaLocation, gamma);
@@ -92,7 +90,7 @@ void HDRLightingTechnique::SetGamma(GLfloat gamma)
 		}
 	}
 
-	m_pCurrentShaderInstance->Disable();
+	//m_pCurrentShaderInstance->Disable();
 }
 
 // ----------------------------------------------------------------------------

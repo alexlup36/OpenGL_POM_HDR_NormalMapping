@@ -34,6 +34,6 @@
 void Log( const char* szMessage );
 void Log( const char* szTag, const char* szMessage );
 void GLClearErrors();
-void GLErrorCheck( const char* szMessage = NULL);
+void GLErrorCheck( const char* szMessage = nullptr);
 
 #endif // __COMMON_H__
