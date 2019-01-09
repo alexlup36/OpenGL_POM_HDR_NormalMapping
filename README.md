@@ -1,4 +1,4 @@
-# OpenglRenderingFramework
+# OpenGL_POM_HDR_NormalMapping
 
 Assimp
 Soil
