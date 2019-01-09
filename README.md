@@ -14,7 +14,7 @@ Demo project that uses the rendering framework
   
 Parallax occlusion mapping  
 Normal mapping  
-Blinn-Phone lighting  
+Blinn-Phong lighting  
 HDR  
   
 Build included in build.zip  
