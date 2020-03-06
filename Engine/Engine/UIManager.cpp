@@ -22,23 +22,6 @@ void UIManager::init(GLFWwindow* pWindow)
 	assert(pWindow != nullptr);
 	m_pWindow = pWindow;
 
-	// Init ant tweak bar
-	TwInit(TW_OPENGL, nullptr);
-	TwWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	// Create a tweak bar
-	m_pBar = TwNewBar("TestBar");
-	TwDefine("Help");
-	TwAddVarRW(m_pBar, 
-		"testValue",
-		TW_TYPE_INT32, 
-		&m_iTestValue,
-		" label='Test value' min=0 max=100 step=1 keyIncr=s keyDecr=S help='Test value help' ");
-
-	// nanogui
-	//m_pScreen = new Screen();
-	//m_pScreen->initialize(m_pWindow, true);
-
 	setCallbacks();
 }
 
@@ -50,13 +33,6 @@ void UIManager::render()
 
 	GLClearErrors();
 
-	// Anttweakbar
-	TwDraw();
-
-	// nanogui
-	//m_pScreen->drawContents();
-	//m_pScreen->drawWidgets();
-
 	GLErrorCheck("UIManager::Render");
 }
 
@@ -64,8 +40,6 @@ void UIManager::render()
 
 void UIManager::windowResize(GLFWwindow* window, int width, int height)
 {
-	// Send the new window size to AntTweakBar
-	TwWindowSize(width, height);
 }
 
 // ----------------------------------------------------------------------------
@@ -121,14 +95,6 @@ void UIManager::framebufferSizeCallback(GLFWwindow*, int width, int height)
 
 void UIManager::setCallbacks()
 {
-	// Anttweakbar
-	glfwSetWindowSizeCallback(m_pWindow, UIManager::windowResize);
-	glfwSetMouseButtonCallback(m_pWindow, (GLFWmousebuttonfun)TwEventMouseButtonGLFW);
-	glfwSetCursorPosCallback(m_pWindow, (GLFWcursorposfun)TwEventMousePosGLFW);
-	glfwSetScrollCallback(m_pWindow, (GLFWscrollfun)TwEventMouseWheelGLFW);
-	glfwSetKeyCallback(m_pWindow, (GLFWkeyfun)TwEventKeyGLFW);
-	glfwSetCharCallback(m_pWindow, (GLFWcharfun)TwEventCharGLFW);
-
 	// nanogui
 	/*glfwSetCursorPosCallback(m_pWindow, UIManager::cursorPosCallback);
 	glfwSetMouseButtonCallback(m_pWindow, UIManager::mouseButtonCallback);

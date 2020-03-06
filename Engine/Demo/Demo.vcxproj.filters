@@ -17,6 +17,35 @@
     <None Include="Shaders\reflectionFS.glsl" />
     <None Include="Shaders\quadRenderVS.glsl" />
     <None Include="Shaders\quadRenderFS.glsl" />
+    <None Include="Shaders\pbrTex.frag" />
+    <None Include="Shaders\pbrTex.vert" />
+    <None Include="Shaders\blinnPhongSolid.frag" />
+    <None Include="Shaders\blinnPhongSolid.vert" />
+    <None Include="Shaders\colour.frag" />
+    <None Include="Shaders\colour.vert" />
+    <None Include="Shaders\gbuffer.vert" />
+    <None Include="Shaders\gbufferNormal.frag" />
+    <None Include="Shaders\gbufferParallax.frag" />
+    <None Include="Shaders\hdr.frag" />
+    <None Include="Shaders\hdr.vert" />
+    <None Include="Shaders\lightingPassDeferred.frag" />
+    <None Include="Shaders\lightingPassDeferred.vert" />
+    <None Include="Shaders\normalMapping.frag" />
+    <None Include="Shaders\normalMapping.vert" />
+    <None Include="Shaders\parallaxMapping.frag" />
+    <None Include="Shaders\parallaxMapping.vert" />
+    <None Include="Shaders\pbr.frag" />
+    <None Include="Shaders\pbr.vert" />
+    <None Include="Shaders\quadRender.frag" />
+    <None Include="Shaders\quadRender.vert" />
+    <None Include="Shaders\reflection.frag" />
+    <None Include="Shaders\reflection.vert" />
+    <None Include="Shaders\simple.frag" />
+    <None Include="Shaders\simple.vert" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\text.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestGLApp.h" />

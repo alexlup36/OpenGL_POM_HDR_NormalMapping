@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "TechniqueMan.h"
+#include "TextureMan.h"
 
 TextMan::TextMan(void)
 {
@@ -37,7 +38,7 @@ TextMan::Initialize(const char* sFontTexturePath)
 	}
 
 	// Initialize texture
-	m_pTextTexture = new Texture(sFontTexturePath, TextureType::Diffuse, true, false);
+	m_pTextTexture = TextureMan::Instance().getTexture(sFontTexturePath, TextureType::Diffuse);
 
 	// Create the vertex buffer and UV buffer
 	glGenBuffers(1, &m_Text2DVertexBufferID);

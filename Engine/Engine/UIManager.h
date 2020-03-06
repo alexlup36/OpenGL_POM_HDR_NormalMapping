@@ -3,15 +3,7 @@
 
 #include "Common.h"
 
-// ----------------------------------------------------------------------------
-
-#include <AntTweakBar.h>
-
-//#include <nanogui\nanogui.h>
-
-// ----------------------------------------------------------------------------
-
-//using namespace nanogui;
+// -------------------------------------------------------------
 
 class UIManager
 {
@@ -37,13 +29,7 @@ private:
 	// App main window
 	GLFWwindow* m_pWindow;
 
-	// UI - anttweakbar
-	TwBar* m_pBar;
 	int m_iTestValue;
-
-	// UI - nanogui
-	//static Screen* m_pScreen;
-	//Widget* m_pWidget = nullptr;
 
 	// Methods
 	static void windowResize(GLFWwindow* window, int width, int height);

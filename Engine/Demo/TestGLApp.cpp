@@ -7,6 +7,7 @@
 #include "TechniqueMan.h"
 #include "UIManager.h"
 #include "MappedProperties.h"
+#include "TextureMan.h"
 
 TestGLApp::TestGLApp(void)
 {
@@ -240,6 +241,19 @@ TestGLApp::SetupScene()
 		TechniqueMan::Instance().registerTechnique(m_pPBRTechnique);
 	}
 
+	// Create PBR texture technique
+	m_pPBRTexTechnique = new PBRTexTechnique();
+	if (m_pPBRTexTechnique->init() == false)
+	{
+		std::cout << "Failed to init PBRTexTechnique. \n";
+		return;
+	}
+	else
+	{
+		// Add technique to the tech manager
+		TechniqueMan::Instance().registerTechnique(m_pPBRTexTechnique);
+	}
+
 	// Material definition
 	Material chromeMaterial;
 	chromeMaterial.Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
@@ -265,7 +279,12 @@ TestGLApp::SetupScene()
 		new Texture(".\\Assets\\brick_displacement.jpg", TextureType::Displacement, true, false),
 		new Texture(".\\Assets\\brick_specular.jpg", TextureType::Specular, true, false));*/
 
-
+	// Initialize pbr texture based material
+	m_pbrTexMaterial.albedoTexture = TextureMan::Instance().getPBRTexture(std::string(".\\Assets\\rock1_diffuse.jpg"), PBRTextureType::Albedo);
+	m_pbrTexMaterial.pbrTexture = TextureMan::Instance().getPBRTexture(std::string(".\\Assets\\rock1_normal.jpg"), PBRTextureType::PBR);
+	m_pbrTexMaterial.normalTexture = TextureMan::Instance().getPBRTexture(std::string(".\\Assets\\rock1_normal.jpg"), PBRTextureType::Normal);
+	m_pbrTexMaterial.displacementTexture = TextureMan::Instance().getPBRTexture(std::string(".\\Assets\\brick_displacement.jpg"), PBRTextureType::Displacement);
+	m_pbrTexMaterial.displacementMapScale = 1.0f;
 
 	GL::Object* quad = new GL::Object("quadObj",
 		".\\Assets\\quad.obj",
@@ -301,12 +320,20 @@ TestGLApp::SetupScene()
 	//planet->Scale(10.0f, 10.0f, 10.0f);
 	planet->Translate(40.0f, 2.0f, 0.0f);
 
+	GL::Object* cyborgPBRTex = new GL::Object("cyborgPBRTex",
+		".\\Assets\\cyborg.obj",
+		m_pPBRTexTechnique,
+		&m_pbrTexMaterial);
+	cyborg->Scale(5.0f, 5.0f, 5.0f);
+	cyborg->Translate(50.0f, 0.0f, 0.0f);
+
 	// Add object to object manager
 	ObjectMan::GetInstance().addObject(quad);
 	ObjectMan::GetInstance().addObject(rock);
 	ObjectMan::GetInstance().addObject(cyborg);
 	ObjectMan::GetInstance().addObject(nanosuit);
 	ObjectMan::GetInstance().addObject(planet);
+	ObjectMan::GetInstance().addObject(cyborgPBRTex);
 
 	// --------------------------------------------------------
 	// Test PBR

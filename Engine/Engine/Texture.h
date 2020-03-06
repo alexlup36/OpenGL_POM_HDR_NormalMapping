@@ -12,11 +12,20 @@ enum class TextureType
 	Displacement,
 };
 
+enum class PBRTextureType
+{
+	Albedo,
+	PBR,
+	Normal,
+	Displacement,
+};
+
 class Texture
 {
 public:
 	Texture( GLuint textureHandler );
-	Texture(const std::string& sFileName, TextureType type, bool bImmutableStorage, bool bEnableMipmaps = false);
+	Texture(const std::string& sFileName, TextureType type, bool bImmutableStorage = true, bool bEnableMipmaps = true);
+	Texture(const std::string& sFileName, PBRTextureType type, bool bImmutableStorage = true, bool bEnableMipmaps = true);
 	virtual ~Texture();
 
 	static void CreateTexture(int iWidth, int iHeight, bool bDepth, GLuint& uiTextureID);

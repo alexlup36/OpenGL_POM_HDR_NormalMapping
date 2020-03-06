@@ -55,22 +55,22 @@ void ObjectMan::renderTech(const BaseTechnique* technique, float dt)
 		// Get a reference to the current object
 		GL::Object* currentObject = first->second;
 
-		if (currentObject->Name.find("pointLightPBRMesh") != std::string::npos ||
-			currentObject->Name.find("pointLightPhongMesh") != std::string::npos ||
-			currentObject->Name.find("quadObj") != std::string::npos)
-		{
-			// Object is a light source mesh
-			glDisable(GL_CULL_FACE);
-			glEnable(GL_BLEND);
-			//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			glBlendFunc(GL_DST_COLOR, GL_ZERO);
-			glBlendEquation(GL_FUNC_ADD);
-		}
-		else
-		{
-			glEnable(GL_CULL_FACE);
-			glDisable(GL_BLEND);
-		}
+		//if (currentObject->Name.find("pointLightPBRMesh") != std::string::npos ||
+		//	currentObject->Name.find("pointLightPhongMesh") != std::string::npos ||
+		//	currentObject->Name.find("quadObj") != std::string::npos)
+		//{
+		//	// Object is a light source mesh
+		//	glDisable(GL_CULL_FACE);
+		//	glEnable(GL_BLEND);
+		//	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		//	glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		//	glBlendEquation(GL_FUNC_ADD);
+		//}
+		//else
+		//{
+		//	glEnable(GL_CULL_FACE);
+		//	glDisable(GL_BLEND);
+		//}
 
 		// Render using the associated technique
 		currentObject->update(dt);

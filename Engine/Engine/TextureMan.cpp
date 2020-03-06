@@ -35,7 +35,8 @@ void TextureMan::addTexture(Texture* texture)
 
 // ----------------------------------------------------------------------------
 
-const Texture* TextureMan::getTexture(const std::string& texturePath) const
+Texture* TextureMan::getTexture(const std::string& texturePath, 
+	TextureType textureType)
 {
 	// Look for the texture
 	auto& texture = m_textureMap.find(texturePath);
@@ -44,8 +45,54 @@ const Texture* TextureMan::getTexture(const std::string& texturePath) const
 		// We found the texture
 		return texture->second;
 	}
+	else
+	{
+		// Create texture
+		Texture* newTexture = new Texture(texturePath, textureType);
+		if (newTexture != nullptr)
+		{
+			// Add texture to cache
+			m_textureMap[texturePath] = newTexture;
+			return newTexture;
+		}
+		else
+		{
+			std::cout << "Failed to create texture: " << texturePath << "\n";
+			assert(newTexture);
+			return nullptr;
+		}
+	}
+}
 
-	return nullptr;
+// ----------------------------------------------------------------------------s
+
+Texture* TextureMan::getPBRTexture(const std::string& texturePath,
+	PBRTextureType textureType)
+{
+	// Look for the texture
+	auto& texture = m_textureMap.find(texturePath);
+	if (texture != m_textureMap.end())
+	{
+		// We found the texture
+		return texture->second;
+	}
+	else
+	{
+		// Create texture
+		Texture* newTexture = new Texture(texturePath, textureType);
+		if (newTexture != nullptr)
+		{
+			// Add texture to cache
+			m_textureMap[texturePath] = newTexture;
+			return newTexture;
+		}
+		else
+		{
+			std::cout << "Failed to create texture: " << texturePath << "\n";
+			assert(newTexture);
+			return nullptr;
+		}
+	}
 }
 
 // ----------------------------------------------------------------------------

@@ -102,6 +102,27 @@ namespace GL
 
 	// ----------------------------------------------------------------------------
 
+	Object::Object(const std::string& name,
+		const std::string& modelPath,
+		BaseTechnique* technique,
+		PBRTexMaterial* material)
+		: Name(name),
+		m_sModelPath(modelPath),
+		m_pCurrentTechnique(technique),
+		m_pbrTexMaterial(*material),
+		m_bEnablePBR(true),
+		m_bIsUI(false)
+	{
+		LoadMesh();
+		initPBRMaterialUniformLocation();
+
+		m_pTransform = new Transform();
+
+		Init();
+	}
+
+	// ----------------------------------------------------------------------------
+
 	Object::~Object(void)
 	{
 		// Delete the transform object
@@ -279,10 +300,6 @@ namespace GL
 		m_pCurrentTechnique->enable();
 
 		GLuint programID = m_pCurrentTechnique->getProgramID();
-		m_pbrMaterialUniformLocation.albedoLoc = glGetUniformLocation(programID, "material.albedo");
-		m_pbrMaterialUniformLocation.metallicLoc = glGetUniformLocation(programID, "material.metallic");
-		m_pbrMaterialUniformLocation.roughnessLoc = glGetUniformLocation(programID, "material.roughness");
-		m_pbrMaterialUniformLocation.aoLoc = glGetUniformLocation(programID, "material.ao");
 	}
 
 	// ----------------------------------------------------------------------------
@@ -299,6 +316,21 @@ namespace GL
 		m_textureUniformLocation.displacementSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "displacementSampler");
 		m_textureUniformLocation.specularSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "specularSampler");
 	}
+
+	// ----------------------------------------------------------------------------
+
+	//void Object::initTextureUniformLocation()
+	//{
+	//	// Initialize uniform locations
+	//	m_pCurrentTechnique->enable();
+
+	//	m_textureUniformLocation.diffuseSampler0 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "diffuseSampler");
+	//	m_textureUniformLocation.diffuseSampler1 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "diffuseSampler2");
+	//	m_textureUniformLocation.normalSampler0 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "normalSampler");
+	//	m_textureUniformLocation.normalSampler1 = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "normalSampler2");
+	//	m_textureUniformLocation.displacementSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "displacementSampler");
+	//	m_textureUniformLocation.specularSampler = glGetUniformLocation(m_pCurrentTechnique->getProgramID(), "specularSampler");
+	//}
 
 	// ----------------------------------------------------------------------------
 

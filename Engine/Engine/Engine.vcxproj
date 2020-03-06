@@ -33,6 +33,7 @@
     <ClCompile Include="ObjectMan.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PBRLightTechnique.cpp" />
+    <ClCompile Include="PBRTexTechnique.cpp" />
     <ClCompile Include="PhongLightTechnique.cpp" />
     <ClCompile Include="RenderToTexture.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="ObjectMan.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PBRLightTechnique.h" />
+    <ClInclude Include="PBRTexTechnique.h" />
     <ClInclude Include="PhongLightTechnique.h" />
     <ClInclude Include="RenderToTexture.h" />
     <ClInclude Include="ShadowMap.h" />
@@ -82,31 +84,32 @@
     <ProjectGuid>{97042D87-92E0-41D8-94BA-068E3B2497CD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

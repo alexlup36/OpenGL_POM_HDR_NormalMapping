@@ -71,6 +71,19 @@ namespace GL
 
 		// ----------------------------------------------------------------------------
 
+		// Activate pbr textures
+		void bindPBRTextures() const
+		{
+			GLuint programID = m_pCurrentTechnique->getProgramID();
+
+			if (m_pbrTexMaterial.albedoTexture != nullptr)
+			{
+				m_pbrTexMaterial.albedoTexture->Bind(0, programID);
+			}
+		}
+
+		// ----------------------------------------------------------------------------
+
 	public:
 		// ----------------------------------------------------------------------------
 
@@ -96,6 +109,10 @@ namespace GL
 			const std::string& modelPath,
 			BaseTechnique* technique,
 			PBRMaterial* material);
+		Object(const std::string& name,
+			const std::string& modelPath,
+			BaseTechnique* technique,
+			PBRTexMaterial* material);
 		~Object(void);
 
 		void Init();
@@ -157,6 +174,7 @@ namespace GL
 
 		Material m_pMaterial;
 		PBRMaterial m_pbrMaterial;
+		PBRTexMaterial m_pbrTexMaterial;
 
 		// Material shader uniform location
 		struct MaterialUniformLocation
@@ -187,6 +205,14 @@ namespace GL
 			GLuint displacementSampler;
 			GLuint specularSampler;
 		};
+
+		struct PBRTextureUniformLocation
+		{
+			GLuint albedoSampler;
+			GLuint normalSampler;
+			GLuint displacementSampler;
+		};
+
 		MaterialUniformLocation m_materialUniformLocation;
 		PBRMaterialUniformLocation m_pbrMaterialUniformLocation;
 		TextureUniformLocation m_textureUniformLocation;

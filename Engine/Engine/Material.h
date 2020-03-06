@@ -68,6 +68,34 @@ struct PBRMaterial
 	}
 };
 
+struct PBRTexMaterial
+{
+	Texture* albedoTexture;
+	Texture* pbrTexture;
+	Texture* normalTexture;
+	Texture* displacementTexture;
+	float displacementMapScale;
+
+	PBRTexMaterial()
+		: albedoTexture(nullptr),
+		pbrTexture(nullptr),
+		normalTexture(nullptr),
+		displacementTexture(nullptr),
+		displacementMapScale(1.0f) {}
+
+	PBRTexMaterial(Texture* albedo, 
+		Texture* pbr,
+		Texture* normal, 
+		Texture* displacement,
+		float dispScale)
+		: albedoTexture(albedo),
+		pbrTexture(pbr),
+		normalTexture(normal),
+		displacementTexture(displacement),
+		displacementMapScale(dispScale) {}
+
+};
+
 // ------------------------------------------------------------------------
 
 #endif // MATERIAL_H

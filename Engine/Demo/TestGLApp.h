@@ -12,6 +12,7 @@
 // Rendering techniques
 #include "PhongLightTechnique.h"
 #include "PBRLightTechnique.h"
+#include "PBRTexTechnique.h"
 
 class TestGLApp : public BaseGLApp
 {
@@ -60,8 +61,10 @@ private:
 	// Rendering techniques
 	PhongLightTechnique* m_pPhongTechnique;
 	PBRLightTechnique* m_pPBRTechnique;
+	PBRTexTechnique* m_pPBRTexTechnique;
 
 	PBRMaterial m_pbrMaterial;
+	PBRTexMaterial m_pbrTexMaterial;
 	PointLight m_pointLightStruct1;
 	PointLight m_pointLightStruct2;
 

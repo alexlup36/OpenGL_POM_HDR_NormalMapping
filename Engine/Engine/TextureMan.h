@@ -26,11 +26,12 @@ public:
 	}
 
 	void addTexture(Texture* texture);
-	const Texture* getTexture(const std::string& textureName) const;
+	Texture* getTexture(const std::string& textureName, TextureType textureType);
+	Texture* getPBRTexture(const std::string& texturePath, PBRTextureType textureType);
 
 private:
 	std::vector<Texture*> m_vTextureList;
-	std::map<std::string, Texture*> m_textureMap;
+	std::map<const std::string, Texture*> m_textureMap;
 };
 
 // ----------------------------------------------------------------------------
